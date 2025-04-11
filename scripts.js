@@ -11,8 +11,10 @@ initializeTool();
 
 function converColumnToRow(){
   var input = $("#input").val();
-  var output = input.split(" ").join(",");
-  $("#output").val(output);
+  var outputComma = input.split(" ").join(",");
+  $("#outputComma").val(outputComma);
+  var outputSpace = input.split(" ").join(" ");
+  $("#outputSpace").val(outputSpace);
 }
 
 $("#input").on("change keyup paste", function(){
