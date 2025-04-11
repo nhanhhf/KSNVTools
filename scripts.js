@@ -20,3 +20,21 @@ function converColumnToRow(){
 $("#input").on("change keyup paste", function(){
   converColumnToRow();
 })
+
+function copyToClipboardComma() {
+  var output = $("#outputComma").val();
+  navigator.clipboard.writeText(output).then(function() {
+    console.log("Copied to clipboard: " + output);
+  }, function(err) {
+    console.error("Could not copy text: ", err);
+  });
+}
+
+function copyToClipboardSpace() {
+  var output = $("#outputSpace").val();
+  navigator.clipboard.writeText(output).then(function() {
+    console.log("Copied to clipboard: " + output);
+  }, function(err) {
+    console.error("Could not copy text: ", err);
+  });
+}
