@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="gantt" style="height: 500px;"></div>
+    <script>
+        const tasks = [
+            {
+                id: "Task 1",
+                name: "Task 1",
+                start: "2023-10-01",
+                end: "2023-10-05",
+                progress: 50,
+                dependencies: ""
+            },
+            {
+                id: "Task 2",
+                name: "Task 2",
+                start: "2023-10-06",
+                end: "2023-10-10",
+                progress: 0,
+                dependencies: "Task 1"
+            }
+        ];
+
+        const gantt = new Gantt("#gantt", tasks);
+    </script>
+</body>
+</html>
