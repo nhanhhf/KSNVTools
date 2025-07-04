@@ -1,0 +1,41 @@
+body {
+    font-family: 'Segoe UI';
+}
+
+.view-controls {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.view-btn {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background-color: #0056b3;
+}
+
+#taskBoardContainer {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    max-width: 100%;
+}
+
+#gantt-container {
+    height: 400px;  
+    max-height: 600px;            /* Fixed height */
+    width: 100%;                /* Fill container */
+    overflow: auto !important;  /* Enable scrollbars on Gantt only */
+}
+
+.assignee-color-1 .bar {fill: #00F5D4!important;}
+.assignee-color-2 .bar {fill: #fa7dca!important;}
+.assignee-color-3 .bar {fill: #00BBF9!important;}
+.assignee-color-4 .bar {fill: #FEE440!important;}
+.assignee-color-5 .bar {fill: #cf6ea8!important;}
