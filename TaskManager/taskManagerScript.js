@@ -3,7 +3,7 @@ let gantt;
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
     // Initialize Gantt chart or other components here if needed
-
+    generateTeamColors(12   );
 });
 
 
@@ -60,12 +60,12 @@ function parseGoogleSheetData(csvData) {
 }
 
 function convertDate(dateString) {
-    // Convert "30/07/2025" to "2025-07-30"
+    // Convert "DD/MM/YYYY" to "YYYY-MM-DD"
     const parts = dateString.split('/');
     if (parts.length === 3) {
         return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
     }
-    return dateString; // Return original if format is unexpected
+    return dateString;
 }
 
 function renderGantt(tasks) {
@@ -92,4 +92,14 @@ function changeTimeView(view) {
     if (gantt) {
         gantt.change_view_mode(view);
     }
+}
+
+function generateTeamColors(count){
+    const colors = [
+        '#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6',
+        '#1abc9c', '#34495e', '#e67e22', '#95a5a6', '#f1c40f',
+        '#8e44ad', '#16a085', '#2c3e50', '#d35400', '#27ae60',
+        '#c0392b', '#8b5cf6', '#06b6d4', '#84cc16', '#f59e0b'
+    ];
+    return colors.slice(0, count);
 }

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8" />
     <title>title</title>
     <script src="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css">
     <link rel="stylesheet" href="taskManagerStyle.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="header">
         <h1>Task Manager</h1>
@@ -18,10 +20,11 @@
         <button class="view-btn" onclick="changeTimeView('Day')">Day</button>
         <button class="view-btn" onclick="changeTimeView('Week')">Week</button>
         <button class="view-btn" onclick="changeTimeView('Month')">Month</button>
-    </div>  
+    </div>
     <div id="taskBoardContainer">
         <div id="gantt"></div>
     </div>
     <script src="taskManagerScript.js"></script>
 </body>
+
 </html>
