@@ -1,8 +1,12 @@
+let gantt;
+
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
     // Initialize Gantt chart or other components here if needed
 
 });
+
+
 
 async function loadData() {
 
@@ -78,8 +82,14 @@ function renderGantt(tasks) {
     }));
 
     // Initialize Gantt chart
-    const gantt = new Gantt(ganttContainer, ganttTasks, {
+    gantt = new Gantt(ganttContainer, ganttTasks, {
         view_mode: 'Week',
         date_format: 'DD/MM/YYYY',
     readonly: true,});
+}
+
+function changeTimeView(view) {
+    if (gantt) {
+        gantt.change_view_mode(view);
+    }
 }
