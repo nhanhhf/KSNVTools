@@ -2,11 +2,7 @@ let gantt;
 let tasks = [];
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
-    // Initialize Gantt chart or other components here if needed
-    generateTeamColors(12);
 });
-
-
 
 async function loadData() {
 
@@ -113,6 +109,15 @@ function convertDate(dateString) {
     return dateString;
 }
 
+function convertDateBack(dateString){
+    // Convert "YYYY-MM-DD" to "DD/MM/YYYY"
+    const parts = dateString.split('-');
+    if (parts.length === 3) {
+        return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+    }
+    return dateString;
+}
+
 function renderGantt(tasks, filterAssignee = 'All') {
     const ganttContainer = document.getElementById('gantt');
     ganttContainer.innerHTML = ''; // Clear previous content
@@ -123,6 +128,7 @@ function renderGantt(tasks, filterAssignee = 'All') {
         start: task.start,
         end: task.end,
         progress: 0,
+        description: task.description,
         custom_class: task.customClass,
         dependencies: task.dependent,
     }));
@@ -137,6 +143,20 @@ function renderGantt(tasks, filterAssignee = 'All') {
         view_mode: 'Day',
         date_format: 'DD/MM/YYYY',
         readonly: true,
+        bar_height: 20,
+
+        on_click: function (task) {
+            console.log('Task clicked:', task);
+        },
+        popup : function ({task}) {
+            return `
+                <div class="details-container">
+                <h5>${task.name}</h5>
+                <p>Hạn: ${convertDateBack(task.end)}</p>
+                <p>${task.description}</p>
+                </div>
+            `;
+        },
     });
 }
 
