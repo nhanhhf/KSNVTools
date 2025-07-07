@@ -119,10 +119,3 @@ function changeTimeView(view) {
         gantt.change_view_mode(view);
     }
 }
-
-function generateTeamColors(count) {
-    const colors = [
-        '#AD6AFF', '#F15BB5', '#FEE440', '#00BBF9', '#00F5D4'
-    ];
-    return colors.slice(0, count);
-}
