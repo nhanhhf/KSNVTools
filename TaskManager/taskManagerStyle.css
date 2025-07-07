@@ -1,3 +1,7 @@
+:root {
+    --gv-grid-height: 300px; /* Default grid height */
+}
+
 body {
     font-family: 'Segoe UI';
 }
@@ -24,15 +28,8 @@ body {
     border-radius: 5px;
     padding: 10px;
     background-color: #f9f9f9;
-    max-width: 100%;
 }
 
-#gantt-container {
-    height: 400px;  
-    max-height: 600px;            /* Fixed height */
-    width: 100%;                /* Fill container */
-    overflow: auto !important;  /* Enable scrollbars on Gantt only */
-}
 
 .assignee-color-1 .bar {fill: #00F5D4!important;}
 .assignee-color-2 .bar {fill: #fa7dca!important;}

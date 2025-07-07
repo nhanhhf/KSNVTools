@@ -1,5 +1,5 @@
 let gantt;
-
+let tasks = [];
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
     // Initialize Gantt chart or other components here if needed
@@ -40,11 +40,11 @@ function parseGoogleSheetData(csvData) {
         return [];
     }
     const rows = csvData.split('&&&').map(row => row.split('|'));
-    const tasks = [];
+    tasks = [];
 
     let prevAssignee = '';
     let assigneeCount = 0;
-
+    let assignees = [];
     // First row is data already in the correct format
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i].map(cell => cell.trim());
@@ -73,13 +73,35 @@ function parseGoogleSheetData(csvData) {
         if (task.assignee !== prevAssignee) {
             prevAssignee = task.assignee;
             assigneeCount++;
+            assignees.push(task.assignee);
         }
         task.customClass = `assignee-color-${assigneeCount % 5}`;
 
         tasks.push(task);
     }
     console.log('Parsed Tasks:', tasks);
+    updateAssigneeFilter(assignees);
     return tasks;
+}
+
+function updateAssigneeFilter(assignees) {
+    const assigneeFilter = document.getElementById('assigneeFilter');
+    assigneeFilter.innerHTML = ''; // Clear previous options
+
+    // Add "All" option
+    const allOption = document.createElement('option');
+    allOption.value = 'All';
+    allOption.textContent = 'All Assignees';
+    assigneeFilter.appendChild(allOption);
+
+    // Add unique assignee options
+    const uniqueAssignees = [...new Set(assignees)];
+    uniqueAssignees.forEach(assignee => {
+        const option = document.createElement('option');
+        option.value = assignee;
+        option.textContent = assignee;
+        assigneeFilter.appendChild(option);
+    });
 }
 
 function convertDate(dateString) {
@@ -91,11 +113,11 @@ function convertDate(dateString) {
     return dateString;
 }
 
-function renderGantt(tasks) {
+function renderGantt(tasks, filterAssignee = 'All') {
     const ganttContainer = document.getElementById('gantt');
     ganttContainer.innerHTML = ''; // Clear previous content
 
-    const ganttTasks = tasks.map(task => ({
+    let ganttTasks = tasks.map(task => ({
         id: task.id,
         name: task.assignee + ": " + task.name,
         start: task.start,
@@ -105,6 +127,10 @@ function renderGantt(tasks) {
         dependencies: task.dependent,
     }));
 
+    // Filter tasks by assignee if needed
+    if (filterAssignee !== 'All') {
+        ganttTasks = ganttTasks.filter(task => task.name.startsWith(filterAssignee + ":"));
+    }
     // Initialize Gantt chart
     gantt = new Gantt(ganttContainer, ganttTasks, {
         arrow_curve: 1,
@@ -119,3 +145,10 @@ function changeTimeView(view) {
         gantt.change_view_mode(view);
     }
 }
+
+$(document).ready(function () {
+    $('#assigneeFilter').on('change', function () {
+        const selectedAssignee = $(this).find("option:selected").attr('value');
+        renderGantt(tasks, selectedAssignee);
+    });
+});
