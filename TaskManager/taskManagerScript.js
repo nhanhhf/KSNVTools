@@ -3,7 +3,7 @@ let gantt;
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
     // Initialize Gantt chart or other components here if needed
-    generateTeamColors(12   );
+    generateTeamColors(12);
 });
 
 
@@ -12,9 +12,7 @@ async function loadData() {
 
     // Convert Google Sheets URL to CSV export URL
     let csvUrl = `https://docs.google.com/spreadsheets/d/1rOqn34_gac-1sd5kHMC24eiZBrL-0RagpH22KdFdbDo/export?format=csv`;
-    
-    //showStatus('Loading data from Google Sheets...', 'loading');
-
+    // Ensure the Google Sheet is published to the web
     try {
         const response = await fetch(csvUrl);
         if (!response.ok) {
@@ -30,29 +28,54 @@ async function loadData() {
         }
 
         renderGantt(tasks);
-        //showStatus(`Successfully loaded ${tasks.length} tasks`, 'success');
-
     } catch (error) {
-        //showStatus(`Error: ${error.message}`, 'error');
         //console.error('Error loading data:', error);
     }
 }
 
 function parseGoogleSheetData(csvData) {
-    const rows = csvData.split('\r\n').map(row => row.split(','));
+    // csvData is only one cell, so we need to split it into rows
+    if (!csvData || csvData.trim() === '') {
+        console.error('No data found in the Google Sheet');
+        return [];
+    }
+    const rows = csvData.split('&&&').map(row => row.split('|'));
     const tasks = [];
 
-    // First row is data already in the correct format
-    for (let i = 0; i  < rows.length; i++) {
-        const row = rows[i].map(cell => cell.trim());
+    let prevAssignee = '';
+    let assigneeCount = 0;
 
-        const task = {
-            id: `task${i}`,
-            assignee: row[0], 
-            name: row[1],
-            start: convertDate(row[2]),
-            end: convertDate(row[3]),
+    // First row is data already in the correct format
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i].map(cell => cell.trim());
+        // first cell was added "\"" for some reason, so we need to remove it
+        if (i == 0) {
+            row[0] = 'NTS';
         }
+        // last cell as well, remove last 2 characters
+        if (i == rows.length - 1) {
+            row[row.length - 1] = row[row.length - 1].slice(0, -1);
+        }
+        const task = {
+            assignee: row[0],
+            taskId: row[1],
+            id: row[0] + row[1],
+            name: row[2],
+            description: row[3],
+            start: convertDate(row[4]),
+            end: convertDate(row[5]),
+            status: row[6],
+            dependent: row[7],
+            customClass: ''
+        }
+
+        // Check if the assignee has changed and assign a color
+        if (task.assignee !== prevAssignee) {
+            prevAssignee = task.assignee;
+            assigneeCount++;
+        }
+        task.customClass = `assignee-color-${assigneeCount % 5}`;
+
         tasks.push(task);
     }
     console.log('Parsed Tasks:', tasks);
@@ -74,18 +97,21 @@ function renderGantt(tasks) {
 
     const ganttTasks = tasks.map(task => ({
         id: task.id,
-        name: task.name,
+        name: task.assignee + ": " + task.name,
         start: task.start,
         end: task.end,
         progress: 0,
-        dependencies: [],
+        custom_class: task.customClass,
+        dependencies: task.dependent,
     }));
 
     // Initialize Gantt chart
     gantt = new Gantt(ganttContainer, ganttTasks, {
-        view_mode: 'Week',
+        arrow_curve: 1,
+        view_mode: 'Day',
         date_format: 'DD/MM/YYYY',
-    readonly: true,});
+        readonly: true,
+    });
 }
 
 function changeTimeView(view) {
@@ -94,12 +120,9 @@ function changeTimeView(view) {
     }
 }
 
-function generateTeamColors(count){
+function generateTeamColors(count) {
     const colors = [
-        '#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6',
-        '#1abc9c', '#34495e', '#e67e22', '#95a5a6', '#f1c40f',
-        '#8e44ad', '#16a085', '#2c3e50', '#d35400', '#27ae60',
-        '#c0392b', '#8b5cf6', '#06b6d4', '#84cc16', '#f59e0b'
+        '#AD6AFF', '#F15BB5', '#FEE440', '#00BBF9', '#00F5D4'
     ];
     return colors.slice(0, count);
 }
